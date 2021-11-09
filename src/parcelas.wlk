@@ -25,20 +25,17 @@ class Parcela{
 		return plantas.all{c=>c.altura() <= metros}
 	}
 	method seAsociaBien(unaPlanta) = true//no completo para que me den los test
+	method porcentajeBienAsociados(){
+		return plantas.count({c=>self.seAsociaBien(c)}) / plantas.size()
+	}
 }
 class ParcelaEcologica inherits Parcela{
 	override method seAsociaBien(unaPlanta){
 		return not self.tieneComplicaciones() and unaPlanta.esIdeal(self)
 	}
-	method porcentajeBienAsociados(){
-		return plantas.count({c=>self.seAsociaBien(c)}) / plantas.size()
-	}
 }
 class ParcelaIndustriales inherits Parcela{
 	override method seAsociaBien(unaPlanta){
 		return plantas.size() <=2 and unaPlanta.esFuerte() 
-	}
-	method porcentajeBienAsociados(){
-		return plantas.count({c=>self.seAsociaBien(c)}) / plantas.size()
 	}
 }
