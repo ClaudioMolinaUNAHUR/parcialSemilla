@@ -1,0 +1,65 @@
+import plantas.*
+import parcelas.*
+import inta.*
+
+describe "testX" {
+	var menta = new Menta(altura = 1, anioObtencion = 2007)
+	var soja = new Soja(altura = 0.6, anioObtencion = 2009)
+	var quinoa = new Quinoa(altura = 0.6, anioObtencion = 2010, toleraHorasSol = 12)
+	var sojaT = new SojaTransgenica(altura = 0.6, anioObtencion = 2009)
+	var hierba = new Hierbabuena(altura = 1, anioObtencion = 2007)
+	var parcela = new Parcela(ancho=20, largo=1, horasDeSol=3)
+	method initialize(){
+		parcela.plantas().add(menta)
+		parcela.plantas().add(soja)
+		parcela.plantas().add(quinoa)
+		parcela.plantas().add(sojaT)
+		parcela.plantas().add(hierba)
+	}
+	test"menta da semillas"{
+		assert.that(menta.daNuevasSemilla())
+	}
+	test"menta da ocupa"{
+		assert.equals(menta.espacioOcupado(),3)
+	}
+	test"soja tolerancia"{
+		assert.equals(soja.toleraHorasSol(),7)
+	}
+	test"soja no da semilla"{
+		assert.notThat(soja.daNuevasSemilla())
+	}
+	test"soja ocupa"{
+		assert.equals(soja.espacioOcupado(),0.3)
+	}
+	test"quinoa da semilla"{
+		assert.that(quinoa.daNuevasSemilla())
+	}
+	test"sojaT no da semilla"{
+		assert.notThat(sojaT.daNuevasSemilla())
+	}
+	test"hieba ocupa el doble de menta"{
+		assert.equals(hierba.espacioOcupado(),6)
+	}
+	test"parcela superficie"{
+		assert.equals(parcela.superficie(),20)
+	}
+	test"parcela tolera maximo de plantas"{
+		assert.equals(parcela.maximoDePlantasToleradas(),4)
+	}
+	test "parcelasIdeales"{
+		assert.that(menta.esIdeal(parcela)) //superficie es 20 y es mayor a 6
+		assert.that(quinoa.esIdeal(parcela))//ninguna mayor a 1,5mt
+		assert.notThat(soja.esIdeal(parcela)) // la soa tolera 7 y la parcela tiene 8horas de sol
+		assert.notThat(sojaT.esIdeal(parcela))//hya mas de 1 planta
+	}
+	test"parcela no tiene complicaciones porque las plantas estan x sobre el nivel de horas de sol "{
+		assert.notThat(parcela.tieneComplicaciones())
+	}
+	test"plantar una nueva planta"{
+		//mi modelo tiene 5 plantas dentro, y supera el maximo 
+		var soja2 = new Soja(altura = 0.6, anioObtencion = 2009)
+		assert.throwsExceptionWithMessage("no entran mas plantas",{parcela.plantar(soja2)})
+	}
+}
+
+}
