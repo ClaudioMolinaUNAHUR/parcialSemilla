@@ -61,5 +61,3 @@ describe "testX" {
 		assert.throwsExceptionWithMessage("no entran mas plantas",{parcela.plantar(soja2)})
 	}
 }
-
-}
